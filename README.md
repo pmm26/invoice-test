@@ -1,5 +1,9 @@
 # SG Technical Test
 
+For notes and commends on this test
+```
+https://www.notion.so/Show-Piece-T-e098c60fd99947028844a5175f3c30f2?pvs=4
+```
 ---
 
 ```bash

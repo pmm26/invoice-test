@@ -6,15 +6,26 @@
     .sticky-column {
       position: sticky;
       left: 0;
-      background-color: white;
       z-index: 1;
     }
-    
-    .Expand  {
+
+    tr:nth-child(odd) {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) .sticky-column {
+      background-color: white;
+    }
+
+    .Expand {
       width: 100% !important;
       white-space: nowrap !important;
-    };
-  };
+    }
+
+    ;
+  }
+
+  ;
 
   .TotalsContainer {
     display: flex;
@@ -24,10 +35,14 @@
 
     .Table {
       width: 300px;
+
       .tr {
-        width: 100%; /* Expand to the full width of the parent container */
-        height: 100%; /* Expand to the full height of the parent container */
-        margin: 0; /* Remove any default margins */
+        width: 100%;
+        /* Expand to the full width of the parent container */
+        height: 100%;
+        /* Expand to the full height of the parent container */
+        margin: 0;
+        /* Remove any default margins */
       }
     }
   }

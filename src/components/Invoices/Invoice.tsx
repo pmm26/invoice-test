@@ -69,7 +69,7 @@ export default function Home() {
               <Table fontSize="sm" variant='striped'>
                 <Thead>
                   <Tr>
-                    <Th >Invoice #</Th>
+                    <Th className="sticky-column">Invoice #</Th>
                     <Th>Date Due</Th>
                     <Th>Date Sent</Th>
                     <Th>Amount</Th>
@@ -89,12 +89,19 @@ export default function Home() {
                     totalPrice
                   }, index) => (
                     <Tr key={id} backgroundColor={index % 2 ? undefined : "lightblue"} className='tr' >
-                      <InvoiceTableTd position={"sticky"} className="sticky-column" settled={settled}>{number}</InvoiceTableTd>
+                      <InvoiceTableTd className="sticky-column" settled={settled}>{number}</InvoiceTableTd>
                       <InvoiceTableTd flex={1} settled={settled}>{format(dateDue, 'MM/dd/yyyy')}</InvoiceTableTd>
                       <InvoiceTableTd flex={1} settled={settled}>{format(dateIssued, 'MM/dd/yyyy')}</InvoiceTableTd>
                       {/* @ts-ignore */}
                       <InvoiceTableTd discount={discount > 0} settled={settled} >{currency(totalPrice)}</InvoiceTableTd>
-                      <Td><IconButton onClick={() => openDeleteInvoiceModal(id)} aria-label='Search database' icon={<DeleteIcon />} /></Td>
+                      <Td>
+                        <IconButton 
+                        isRound={true}
+                        onClick={() => openDeleteInvoiceModal(id)}
+                        colorScheme='red'
+                        aria-label='Delete Invoice' 
+                        icon={<DeleteIcon />} />
+                        </Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -105,41 +112,41 @@ export default function Home() {
 
         <div className="TotalsContainer">
           {/* <div className="table" > */}
-            <GeneralBox >
-              <Table className='table' fontSize="sm" variant='striped' overflowX="auto">
-                <Tbody>
-                  <Tr backgroundColor="lightblue">
-                    <Td><strong>Discount:</strong></Td>
-                    {/* @ts-ignore */}
-                    <Td textAlign="right">{currency(state.discount)}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td><strong>Invoice Total:</strong></Td>
-                    {/* @ts-ignore */}
-                    <Td textAlign="right">{currency(state.invoiceTotal)}</Td>
-                  </Tr>
-                  
-                  <Tr backgroundColor="lightblue">
-                    <Td><strong>Total Paid:</strong></Td>
-                    {/* @ts-ignore */}
-                    <Td textAlign="right">{currency(state.totalPaid)}</Td>
-                  </Tr>
-                  <Tr >
-                    <Td border="none"><strong>Total Owed:</strong></Td>
-                    {/* @ts-ignore */}
-                    <Td border="none" textAlign="right">{currency(state.totalOwed)}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </GeneralBox>
-          </div>
+          <GeneralBox >
+            <Table className='table' fontSize="sm" variant='striped' overflowX="auto">
+              <Tbody>
+                <Tr backgroundColor="lightblue">
+                  <Td><strong>Discount:</strong></Td>
+                  {/* @ts-ignore */}
+                  <Td textAlign="right">{currency(state.discount)}</Td>
+                </Tr>
+                <Tr>
+                  <Td><strong>Invoice Total:</strong></Td>
+                  {/* @ts-ignore */}
+                  <Td textAlign="right">{currency(state.invoiceTotal)}</Td>
+                </Tr>
+
+                <Tr backgroundColor="lightblue">
+                  <Td><strong>Total Paid:</strong></Td>
+                  {/* @ts-ignore */}
+                  <Td textAlign="right">{currency(state.totalPaid)}</Td>
+                </Tr>
+                <Tr >
+                  <Td border="none"><strong>Total Owed:</strong></Td>
+                  {/* @ts-ignore */}
+                  <Td border="none" textAlign="right">{currency(state.totalOwed)}</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </GeneralBox>
+        </div>
         {/* </div> */}
       </PageWrapper>
     </div>
   )
 }
 
-const InvoiceTableTd = ({ discount, settled, children, className, sticky, flex }: { discount?: boolean, settled: boolean, children: any, className?: string , sticky?: string, flex?: string}) => {
+const InvoiceTableTd = ({ discount, settled, children, className, sticky, flex }: { discount?: boolean, settled: boolean, children: any, className?: string, sticky?: string, flex?: number }) => {
 
   const textColor = (function () {
     // function body
@@ -152,6 +159,6 @@ const InvoiceTableTd = ({ discount, settled, children, className, sticky, flex }
   })();
 
   return (
-    <Td sticky={sticky} className={className} textColor={textColor}>{children}</Td>
+    <Td flex={flex} className={className} textColor={textColor}>{children}</Td>
   )
 }

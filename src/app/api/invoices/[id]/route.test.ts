@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server'
 
 import { GET, ContextType } from './route'
 import * as db from '../../../../db';
-import type { NextApiRequest, NextApiResponse } from "next";
 import { faker } from '@faker-js/faker';
 import { createInvoice, createLineItem } from '../../../../utils/data-helpers'
 
@@ -12,7 +11,7 @@ describe("Find Customer Route", () => {
   describe('GET /api/invoices/[recipientId]', () => {
 
     it('Invoices filtered', async () => {
-      const req = {} as NextApiRequest;
+      const req = {} as Request;
       const invoice1 = createInvoice("2", "company1", 1)
       const invoiceWithStringDates = { ...invoice1, dateIssued: invoice1.dateIssued.toISOString(), dateDue: invoice1.dateDue.toISOString() }
 
@@ -40,7 +39,7 @@ describe("Find Customer Route", () => {
     });
 
     it('Invoices settled', async () => {
-      const req = {} as NextApiRequest;
+      const req = {} as Request;
 
       const userId = "1"
       const invoice1 = createInvoice(userId, "company1", 1)
@@ -83,7 +82,7 @@ describe("Find Customer Route", () => {
     });
 
     it('Invoices not settled', async () => {
-      const req = {} as NextApiRequest;
+      const req = {} as Request;
 
       const userId = "1"
       const invoice1 = createInvoice(userId, "company1", 2)
@@ -132,7 +131,7 @@ describe("Find Customer Route", () => {
 
 
     it('Discount on unpaied Orders over 100', async () => {
-      const req = {} as NextApiRequest;
+      const req = {} as Request;
 
       const userId = "1"
       const invoice1 = createInvoice(userId, "company1", 1)
