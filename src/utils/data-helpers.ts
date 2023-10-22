@@ -56,7 +56,7 @@ export interface Invoice {
   number: number;
   dateIssued: Date;
   dateDue: Date;
-  settled: Boolean;
+  settled: boolean;
   recipient: string;
   patron: string;
   items: LineItem[];

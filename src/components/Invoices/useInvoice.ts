@@ -1,6 +1,6 @@
 
 'use client'
-import { useState, useReducer, useEffect } from "react";
+import { useState, useReducer, useEffect, useCallback } from "react";
 import {
   Flex,
   Heading,
@@ -17,7 +17,6 @@ import { PageWrapper } from "../pageWrapper";
 import { GeneralBox } from "../generalBox";
 import { Customer, Invoice } from "@/utils/data-helpers";
 import axios from 'axios'
-import { format, compareAsc } from 'date-fns'
 
 
 // Define action types
@@ -64,7 +63,8 @@ const counterReducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case LOAD_INVOICES:
       return {
-        ...state, invoices: action.invoices,
+        ...state,
+        invoices: action.invoices,
         discount: action.discount,
         invoiceTotal: action.invoiceTotal,
         totalPaid: action.totalPaid,
@@ -96,12 +96,7 @@ const useInvoice = () => {
 
   const [state, dispatch] = useReducer(counterReducer, initialState);
 
-  useEffect(() => {
-    // Load User
-    axios.get(`/api/findCustomer/${state.userId}`).then((response) => {
-      dispatch({ type: LOAD_CUSTOMER, customer: response.data.data })
-    })
-
+  const loadInvoices = useCallback(() => {
     // Load invoices
     axios.get(`/api/invoices/${state.userId}`).then(response => {
       const invoiceData = response.data.data
@@ -120,31 +115,42 @@ const useInvoice = () => {
     })
   }, [state.userId])
 
+    useEffect(() => {
+      // Load User
+      axios.get(`/api/findCustomer/${state.userId}`).then((response) => {
+        dispatch({ type: LOAD_CUSTOMER, customer: response.data.data })
+      })
 
-  const closeDeleteInvoiceModal = () => {
-    dispatch({ type: CLOSE_MODAL })
-  }
+      loadInvoices()
+    }, [loadInvoices, state.userId])
 
-  const openDeleteInvoiceModal = (invoiceId: string) => {
-    dispatch({ type: OPEN_MODAL, invoiceId  })
-  }
 
-  const deleteInvoice = async (invoiceId: string) => {
-    axios.delete(`/api/invoices/${state.userId}`).then(response => {
+    const closeDeleteInvoiceModal = () => {
       dispatch({ type: CLOSE_MODAL })
-    }).catch(err => {
-      console.log(err)
-      dispatch({ type: CLOSE_MODAL })
-    })
+    }
+
+    const openDeleteInvoiceModal = (invoiceId: string) => {
+      dispatch({ type: OPEN_MODAL, invoiceId })
+    }
+
+    const deleteInvoice = async () => {
+      await axios.delete(`/api/invoices/${state.deleteInvoiceModal}`).then(async response => {
+        console.log("response", response)
+        await loadInvoices()
+        dispatch({ type: CLOSE_MODAL })
+      }).catch(err => {
+        console.log(err)
+        dispatch({ type: CLOSE_MODAL })
+      })
+    }
+
+    return {
+      state,
+      openDeleteInvoiceModal,
+      closeDeleteInvoiceModal,
+      deleteInvoice
+
+    }
   }
 
-  return {
-    state,
-    openDeleteInvoiceModal,
-    closeDeleteInvoiceModal,
-    deleteInvoice
-
-  }
-}
-
-export default useInvoice
+  export default useInvoice

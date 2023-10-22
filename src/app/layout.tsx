@@ -1,6 +1,6 @@
 `use client`
 import type { Metadata } from 'next'
-import { Providers } from './components/providers'
+import { Providers } from '../components/providers'
 import dynamic from 'next/dynamic'
 
 
